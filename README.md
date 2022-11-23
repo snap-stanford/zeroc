@@ -25,13 +25,23 @@ git submodule init; git submodule update
 
 2. Install dependencies.
 
-Create a new environment using conda. Install [pytorch](https://pytorch.org/) (version >= 1.10.1). Then install other dependencies via:
+Create a new environment using [conda](https://docs.conda.io/en/latest/miniconda.html), with Python >= 3.7. Install [pytorch](https://pytorch.org/) (version >= 1.10.1, also need to install torchvision). Then install other dependencies via:
 ```code
 pip install -r requirements.txt
 ```
 
 # Dataset:
 The dataset files can be generated using the BabyARC engine with the `datasets/BabyARC` submodule, or directly downloaded via [this link](https://drive.google.com/drive/folders/1g0wNYb4JuwA1lcDxgv4yUDOyToszNYmQ?usp=share_link).  If download from the above link, put the downloaded data ("*.p" files) under the `./datasets/data/` folder.
+
+# Structure
+Here we detail the structure of this repo. The ".ipynb" files are equivalent to the corresponding ".py" version, where the ".ipynb" are easy to perform tests, while ".py" are suitable for long-running experiments. The .py are transformed from the corresponding ".ipynb" files via `jupyter nbconvert --to python {*.ipynb FILE}`. Here we detail the repo's structure:
+* The [concept_library](https://github.com/tailintalent/concept_library) contains the concept class definitions and EBM model architectures.
+* The [train.py](https://github.com/snap-stanford/zeroc/blob/master/train.py) (or the corresponding "train.ipynb" file) is the script for training elementary concepts and relations.
+* The [inference.ipynb](https://github.com/snap-stanford/zeroc/blob/master/train.ipynb) contains commands to perform zero-shot concept recognition and aquisition.
+* The [concept_transfer.py](https://github.com/snap-stanford/zeroc/blob/master/concept_transfer.py) and [concepts_shapes.py](https://github.com/snap-stanford/zeroc/blob/master/concepts_shapes.py) contains helper functions and classes for training.
+* The [datasets/data/](https://github.com/snap-stanford/zeroc/blob/master/datasets/data) folder contains the datasets used for training.
+* The results are saved under [results/](https://github.com/snap-stanford/zeroc/blob/master/results) folder,
+
 
 
 # Training:
@@ -69,14 +79,14 @@ python train.py --dataset=y-Parallel+VerticalMid+VerticalEdge --exp_id=zeroc --d
 ```
 
 # Inference
-The zero-shot concept recognition and aquisition experiments are provided in [inference_zero_shot.ipynb](https://github.com/snap-stanford/zeroc/blob/master/inference_zero_shot.ipynb).
+The zero-shot concept recognition and aquisition experiments are provided in [inference_zero_shot.ipynb](https://github.com/snap-stanford/zeroc/blob/master/inference.ipynb).
 
 # Citation
 If you find our work and/or our code useful, please cite us via:
 
 ```bibtex
 @inproceedings{wu2022zeroc,
-title={Zeroc: A neuro-symbolic model for zero-shot concept recognition and acquisition at inference time},
+title={ZeroC: A neuro-symbolic model for zero-shot concept recognition and acquisition at inference time},
 author={Wu, Tailin and Tjandrasuwita, Megan and Wu, Zhengxuan and Yang, Xuelin and Liu, Kevin and Sosi{\v{c}}, Rok and Leskovec, Jure},
 booktitle={Neural Information Processing Systems},
 year={2022},
