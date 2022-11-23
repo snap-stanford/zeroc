@@ -25,7 +25,7 @@ git submodule init; git submodule update
 
 2. Install dependencies.
 
-Create a new environment using conda. Install pytorch (version >= 1.10.1). Then install other dependencies via:
+Create a new environment using conda. Install [pytorch](https://pytorch.org/) (version >= 1.10.1). Then install other dependencies via:
 ```code
 pip install -r requirements.txt
 ```
