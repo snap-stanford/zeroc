@@ -16,7 +16,7 @@ ZeroC represents concepts as graphs of constituent concept models (as nodes) and
 
 # Installation
 
-1. First clone the directory. Then run the following command to initialize the submodules:
+1. First clone the directory. Since this repo depends on the repos of [concept_library](https://github.com/tailintalent/concept_library) for functionality of concept classes, and [BabyARC](https://github.com/frankaging/BabyARC) as a dataset-generating engine, run the following command to initialize the submodules:
 
 ```code
 git submodule init; git submodule update
