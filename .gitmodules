@@ -1,0 +1,9 @@
+[submodule "concept_library"]
+	path = concept_library
+	url = git@github.com:tailintalent/concept_library.git
+[submodule "datasets/ARC"]
+	path = datasets/ARC
+	url = git@github.com:fchollet/ARC.git
+[submodule "datasets/BabyARC"]
+	path = datasets/BabyARC
+	url = git@github.com:frankaging/BabyARC.git
