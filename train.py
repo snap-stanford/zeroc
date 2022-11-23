@@ -7,8 +7,11 @@
 """
 Script for training EBMs for discovering concepts, relations and operators.
 """
-get_ipython().run_line_magic('load_ext', 'autoreload')
-get_ipython().run_line_magic('autoreload', '2')
+try:
+    get_ipython().run_line_magic('load_ext', 'autoreload')
+    get_ipython().run_line_magic('autoreload', '2')
+except:
+    pass
 
 import argparse
 from collections import OrderedDict, Iterable
@@ -52,10 +55,10 @@ from zeroc.argparser import get_args_EBM
 # from zeroc.slot_attention.tetrominoes import Tetrominoes
 from zeroc.concept_library.models import get_model_energy, load_model_energy, neg_mask_sgd, neg_mask_sgd_with_kl, id_to_tensor, requires_grad
 from zeroc.concept_library.settings import REPR_DIM, DEFAULT_OBJ_TYPE
-from zeroc.utils import REA_PATH
+from zeroc.utils import REA_PATH, EXP_PATH, get_root_dir
 from zeroc.concept_transfer import convert_babyarc
 from zeroc.concept_library.util import to_cpu_recur, try_call, Printer, transform_dict, MineDataset, is_diagnose, reduce_tensor, get_hashing, pdump, pload, remove_elements, loss_op_core, filter_kwargs, to_Variable, gather_broadcast, get_pdict, COLOR_LIST, set_seed, Zip, Early_Stopping, init_args, make_dir, str2bool, get_filename, get_filename_short, get_machine_name, get_device, record_data, plot_matrices, filter_filename, get_next_available_key, to_np_array, to_Variable, get_filename_short, write_to_config, Dictionary, Batch, to_cpu
-from zeroc.concept_library.util import model_parallel, color_dict, clip_grad, identity_fun, seperate_concept, to_one_hot, onehot_to_RGB, get_root_dir, get_module_parameters, assign_embedding_value, get_hashing, to_device_recur, visualize_matrices, repeat_n, mask_iou_score, shrink, get_obj_from_mask
+from zeroc.concept_library.util import model_parallel, color_dict, clip_grad, identity_fun, seperate_concept, to_one_hot, onehot_to_RGB, get_module_parameters, assign_embedding_value, get_hashing, to_device_recur, visualize_matrices, repeat_n, mask_iou_score, shrink, get_obj_from_mask
 p = Printer()
 
 
@@ -5850,7 +5853,7 @@ def get_filename(args, short_str_dict, is_local_path):
         short_str_dict,
         args_dict=args.__dict__,
     )
-    dirname = REA_PATH + "/{}_{}/".format(args.exp_id, args.date_time)
+    dirname = EXP_PATH + "/{}_{}/".format(args.exp_id, args.date_time)
     if args.exp_name != "None":
         # If args.exp_name != "None", the experiments are saved under "{exp_id}_{date_time}/{exp_name}/"
         dirname += "{}/".format(args.exp_name)

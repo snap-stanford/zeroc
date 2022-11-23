@@ -2,7 +2,9 @@ import torch
 import torch.nn as nn
 import sys, os
 
-REA_PATH = '../results'
+REA_PATH = 'datasets'
+EXP_PATH = 'results'
+
 
 COLOR_DICT_3D = {
     0: [0, 0, 0],
