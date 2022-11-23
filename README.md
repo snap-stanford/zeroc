@@ -4,16 +4,13 @@
 
 This is the official repo for [ZeroC: A Neuro-Symbolic Model for Zero-shot Concept Recognition and Acquisition at Inference Time](https://arxiv.org/abs/2206.15049) (Wu et al. NeurIPS 2022). ZeroC is a neuro-symbolic architecture that after pretrained with simpler concepts and relations, can recognize and acquire novel, more complex concepts in a zero-shot way. 
 
-ZeroC represents concepts as graphs of constituent concept models (as nodes) and their relations (as edges). We design ZeroC architecture so that it allows a one-to-one mapping between an abstract, symbolic graph structure of a concept and its corresponding energy-based model that provides a probability model for concepts and relations. After pre-trained with simpler concepts and relations, at inference time, without further training, ZeroC can perform:
+<a href="url"><img src="https://github.com/snap-stanford/zeroc/blob/master/assets/hierarchy.png" align="center" width="600" ></a>
+
+ZeroC represents concepts as graphs of constituent concept models (as nodes) and their relations (as edges). We design ZeroC architecture so that it allows a **one-to-one mapping** between an abstract, symbolic graph structure of a concept and its corresponding energy-based model that provides a probability model for concepts and relations (by summing over constituent concept and relation EBMs according to the graph, see figure above). After pre-trained with simpler concepts and relations, at inference time, without further training, ZeroC can perform:
+
 * **Zero-shot concept recognition**: recognize a more complex, hierarchical concept from image, given the symbolic graph structure of this hierarchical concept.
 
-* **Zero-shot concept aquisition**: infer the graph structure of a hierarchical concept, given a single demonstration of an image containing that concept. Furthermore, this graph structure can be transferred across domains (e.g., from 2D image to 3D image), allowing the ZeroC in the second domain to recognize such hierarchical concept without seeing any demonstration.
-
-ZeroC architecture and composition:
-
-<a href="url"><img src="https://github.com/snap-stanford/zeroc/blob/master/assets/hierarchy.png" align="center" width="700" ></a>
-
-Zero-shot concept aquisition across domains:
+* **Zero-shot concept aquisition**: given a single demonstration of an image containing a hierarchical concept, infer its graph structure. Furthermore, this graph structure can be transferred across domains (e.g., from 2D image to 3D image), allowing the ZeroC in the second domain to directly recognize such hierarchical concept (see figure below):
 
 <a href="url"><img src="https://github.com/snap-stanford/zeroc/blob/master/assets/2d3d_zeroc.png" align="center" width="500" ></a>
 
@@ -39,7 +36,7 @@ The dataset files can be downloaded via [this link](https://drive.google.com/dri
 
 # Training:
 
-Here we provide example commands for training concepts and relations. Full training command can be found here. The results are saved under `./results/{--exp_id}_{--date_time}/`.
+Here we provide example commands for training concepts and relations. Full training command can be found [here](https://github.com/snap-stanford/zeroc/blob/master/results/README.md). The results are saved under `./results/{--exp_id}_{--date_time}/`.
 
 Training concept (the `--dataset` specifies the dataset):
 ```code
