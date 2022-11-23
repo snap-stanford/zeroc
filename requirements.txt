@@ -1,3 +1,7 @@
 networkx
 matplotlib
 kmeans_pytorch
+einops
+torchsummary
+multiset
+vapory
