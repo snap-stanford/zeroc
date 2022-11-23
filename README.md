@@ -39,7 +39,7 @@ Here we detail the structure of this repo. The ".ipynb" files are equivalent to 
 * The [train.py](https://github.com/snap-stanford/zeroc/blob/master/train.py) (or the corresponding "train.ipynb" file) is the script for training elementary concepts and relations.
 * The [inference.ipynb](https://github.com/snap-stanford/zeroc/blob/master/train.ipynb) contains commands to perform zero-shot concept recognition and aquisition.
 * The [concept_transfer.py](https://github.com/snap-stanford/zeroc/blob/master/concept_transfer.py) and [concepts_shapes.py](https://github.com/snap-stanford/zeroc/blob/master/concepts_shapes.py) contain helper functions and classes for training.
-* The [datasets/data/](https://github.com/snap-stanford/zeroc/blob/master/datasets/data) folder contains the datasets used for training.
+* The [datasets/data/](https://github.com/snap-stanford/zeroc/blob/master/datasets/data) folder contains the datasets used for training. The [datasets/babyarc_datasets.ipynb](https://github.com/snap-stanford/zeroc/blob/master/datasets/babyarc_datasets.ipynb) contains demonstrations about how to use the BabyARC engine to generate complex grid-world based reasoning tasks.
 * The results are saved under [results/](https://github.com/snap-stanford/zeroc/blob/master/results) folder,
 
 
