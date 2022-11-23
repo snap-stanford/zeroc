@@ -25,7 +25,7 @@ git submodule init; git submodule update
 
 2. Install dependencies.
 
-Create a new environment using [conda](https://docs.conda.io/en/latest/miniconda.html), with Python >= 3.7. Install [pytorch](https://pytorch.org/) (version >= 1.10.1, also need to install torchvision). Then install other dependencies via:
+Create a new environment using [conda](https://docs.conda.io/en/latest/miniconda.html), with Python >= 3.7. Install [PyTorch](https://pytorch.org/) (version >= 1.10.1). The repo is tested with PyTorch version of 1.10.1 and there is no guarentee that other version works. Then install other dependencies via:
 ```code
 pip install -r requirements.txt
 ```
