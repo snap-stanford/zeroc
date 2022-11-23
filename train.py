@@ -44,21 +44,19 @@ sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 from zeroc.datasets.arc_image import ARCDataset
 from zeroc.datasets.BabyARC.code.dataset.dataset import *
 from zeroc.utils import ClevrImagePreprocessor
-# from reasoning.clevr_dataset_gen.dataset import ClevrRelationDataset, create_easy_dataset
-# from reasoning.clevr_dataset_gen.generate_concept_dataset import get_clevr_concept_data
+# from zeroc.clevr_dataset_gen.dataset import ClevrRelationDataset, create_easy_dataset
+# from zeroc.clevr_dataset_gen.generate_concept_dataset import get_clevr_concept_data
 from zeroc.argparser import get_args_EBM
-# from reasoning.slot_attention.clevr import CLEVR
-# from reasoning.slot_attention.multi_dsprites import MultiDsprites
-# from reasoning.slot_attention.tetrominoes import Tetrominoes
+# from zeroc.slot_attention.clevr import CLEVR
+# from zeroc.slot_attention.multi_dsprites import MultiDsprites
+# from zeroc.slot_attention.tetrominoes import Tetrominoes
 from zeroc.concept_library.models import get_model_energy, load_model_energy, neg_mask_sgd, neg_mask_sgd_with_kl, id_to_tensor, requires_grad
 from zeroc.concept_library.settings import REPR_DIM, DEFAULT_OBJ_TYPE
-from zeroc.utils import REA_PATH, REA_PATH_LOCAL
+from zeroc.utils import REA_PATH
 from zeroc.concept_transfer import convert_babyarc
 from zeroc.concept_library.util import to_cpu_recur, try_call, Printer, transform_dict, MineDataset, is_diagnose, reduce_tensor, get_hashing, pdump, pload, remove_elements, loss_op_core, filter_kwargs, to_Variable, gather_broadcast, get_pdict, COLOR_LIST, set_seed, Zip, Early_Stopping, init_args, make_dir, str2bool, get_filename, get_filename_short, get_machine_name, get_device, record_data, plot_matrices, filter_filename, get_next_available_key, to_np_array, to_Variable, get_filename_short, write_to_config, Dictionary, Batch, to_cpu
 from zeroc.concept_library.util import model_parallel, color_dict, clip_grad, identity_fun, seperate_concept, to_one_hot, onehot_to_RGB, get_root_dir, get_module_parameters, assign_embedding_value, get_hashing, to_device_recur, visualize_matrices, repeat_n, mask_iou_score, shrink, get_obj_from_mask
 p = Printer()
-
-REA_PATH = "/dfs/user/tailin/.results"
 
 
 # ## 1. Dataset:
@@ -172,8 +170,8 @@ class ConceptDataset(Dataset):
                         canvas_size=canvas_size,
                     )
                     babyArcDataset = BabyARCDataset(
-                        pretrained_obj_cache=os.path.join(get_root_dir(), 'concept_env/datasets/arc_objs.pt'),
-                        save_directory=get_root_dir() + "/concept_env/BabyARCDataset/",
+                        pretrained_obj_cache=os.path.join(get_root_dir(), 'datasets/arc_objs.pt'),
+                        save_directory=get_root_dir() + "/datasets/BabyARCDataset/",
                         object_limit=None,
                         noise_level=0,
                         canvas_size=canvas_size,
@@ -296,8 +294,8 @@ class ConceptDataset(Dataset):
                     self.concept_collection = mode.split("-")[-1].split("+")
                     input_concepts = [""]
                 dataset = BabyARCDataset(
-                    pretrained_obj_cache=os.path.join(get_root_dir(), 'concept_env/datasets/arc_objs.pt'),
-                    save_directory=get_root_dir() + "/concept_env/BabyARCDataset/",
+                    pretrained_obj_cache=os.path.join(get_root_dir(), 'datasets/arc_objs.pt'),
+                    save_directory=get_root_dir() + "/datasets/BabyARCDataset/",
                     object_limit=None,
                     noise_level=0,
                     canvas_size=canvas_size,
@@ -1308,8 +1306,8 @@ class ConceptCompositionDataset(Dataset):
         if idx_list is None:
             assert data is None
             dataset_engine = BabyARCDataset(
-                pretrained_obj_cache=os.path.join(get_root_dir(), 'concept_env/datasets/arc_objs.pt'),
-                save_directory=get_root_dir() + "/concept_env/BabyARCDataset/",
+                pretrained_obj_cache=os.path.join(get_root_dir(), 'datasets/arc_objs.pt'),
+                save_directory=get_root_dir() + "/datasets/BabyARCDataset/",
                 object_limit=None,
                 noise_level=0,
                 canvas_size=canvas_size,
@@ -2748,7 +2746,7 @@ def get_dataset(args, n_examples=None, isplot=False, is_load=False, is_rewrite=F
     set_seed(seed)
     if args.dataset in ["cifar10"]:
         """Standard datasets"""
-        dataset = datasets.CIFAR10(get_root_dir() + '/concept_env/datasets/', download=True, transform=transforms.ToTensor())
+        dataset = datasets.CIFAR10(get_root_dir() + '/datasets/', download=True, transform=transforms.ToTensor())
         args.in_channels = dataset[0][0].shape[0]
         args.image_size = dataset[0][0].shape[-2:]
         args.concept_collection = None
@@ -3775,8 +3773,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# from reasoning.experiments.concept_energy import get_dataset, ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-RectE3a+Eshape+Rect+Tshape+Fshape+Ashape^RectE3a",
@@ -3802,8 +3800,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-RectE3a+Cshape[2,5]+Lshape[2,5]+Tshape[2,5]+Rect[2,5]+RectSolid[2,5]^RectE3a",
@@ -3829,8 +3827,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-Cshape[2,5]+Lshape[2,5]+Tshape[2,5]+Rect[2,5]+RectSolid[2,5]^Cshape[2,5]",
@@ -3873,7 +3871,7 @@ def test_line_rel(pos1, pos2):
 # In[ ]:
 
 
-# from reasoning.experiments.concepts_ARC2 import SameShape, SameColor, SameAll, SameRow, SameCol, SubsetOf, IsInside, IsNonOverlapXY
+# from zeroc.concepts_shapes import SameShape, SameColor, SameAll, SameRow, SameCol, SubsetOf, IsInside, IsNonOverlapXY
 # for data in relation_dataset:
 #     pos_id = data[2]
 #     info = data[3]
@@ -3910,8 +3908,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-Eshape+Ashape^Eshape",
@@ -3937,8 +3935,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-IsNonOverlapXY+IsInside+IsEnclosed(Rect[4,16]+Randshape[3,8]+Lshape[3,10]+Tshape[3,10])",
@@ -3964,8 +3962,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-RectE1a+Lshape^RectE1a",
@@ -3990,8 +3988,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "pc-RectE1b+RectE1c+RectE2b+RectE2c+RectE3b+RectE3c",
@@ -4015,8 +4013,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "pc-RectE1a+RectE2a+RectE3a",
@@ -4040,8 +4038,8 @@ def test_line_rel(pos1, pos2):
 # # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # # BabyARC-fewshot dataset for classification:
-# # # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# # from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-Rect[4,16]+Eshape[3,10]",
@@ -4067,8 +4065,8 @@ def test_line_rel(pos1, pos2):
 # # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # # BabyARC-fewshot dataset for classification:
-# # # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# # from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-IsNonOverlapXY+IsInside+IsEnclosed(Rect[4,16]+Randshape[3,8]+Lshape[3,10]+Tshape[3,10])",
@@ -4094,8 +4092,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "c-Rect[4,15]+Eshape[5,12]",
@@ -4119,8 +4117,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "pc-Cshape+Eshape+Fshape+Ashape+Hshape+Rect",
@@ -4144,8 +4142,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "pg-Cshape+Lshape+Tshape+Rect^Eshape+Fshape+Ashape",
@@ -4169,8 +4167,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-fewshot dataset for classification:
-# # from reasoning.experiments.concept_energy import ConceptDataset, ConceptFewshotDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 
 # args = init_args({
 #     "dataset": "yc-Eshape[5,9]+Fshape[5,9]+Ashape[5,9]",
@@ -4242,8 +4240,8 @@ def test_line_rel(pos1, pos2):
 # # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # # BabyARC-concept dataset:
-# # from reasoning.experiments.concept_energy import get_dataset, ConceptDataset
-# # from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset, ConceptFewshotDataset
+# from zeroc.concept_library.util import init_args
 # concept_args = init_args({
 #     "dataset": "c-Line",
 #     "seed": 1,
@@ -4264,8 +4262,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-concept dataset:
-# from reasoning.experiments.concept_energy import get_dataset, ConceptDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset
+# from zeroc.concept_library.util import init_args
 # concept_args = init_args({
 #     "dataset": "c-Line",
 #     "seed": 1,
@@ -4299,8 +4297,8 @@ def test_line_rel(pos1, pos2):
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
 # # BabyARC-concept dataset:
-# from reasoning.experiments.concept_energy import get_dataset, ConceptDataset
-# from reasoning.pytorch_net.util import init_args
+# from zeroc.concept_library.train import get_dataset, ConceptDataset
+# from zeroc.concept_library.util import init_args
 # concept_args = init_args({
 #     "dataset": "c-Line+Lshape+Rect+RectSolid",
 #     "seed": 1,
@@ -4482,8 +4480,8 @@ def test_line_rel(pos1, pos2):
 
 # if __name__ == "__main__":
 #     # BabyARC-concept dataset:
-#     from reasoning.experiment.concept_energy import get_dataset, ConceptDataset
-#     from reasoning.pytorch_net.util import init_args
+#     from zeroc.concept_library.train import get_dataset, ConceptDataset
+#     from zeroc.concept_library.util import init_args
 #     args = init_args({
 #         "dataset": "h-c^(1,2):Line+Lshape+Rect+RectSolid",
 #         "seed": 1,
@@ -5852,10 +5850,7 @@ def get_filename(args, short_str_dict, is_local_path):
         short_str_dict,
         args_dict=args.__dict__,
     )
-    if is_local_path:
-        dirname = REA_PATH_LOCAL + "/{}_{}/".format(args.exp_id, args.date_time)
-    else:
-        dirname = REA_PATH + "/{}_{}/".format(args.exp_id, args.date_time)
+    dirname = REA_PATH + "/{}_{}/".format(args.exp_id, args.date_time)
     if args.exp_name != "None":
         # If args.exp_name != "None", the experiments are saved under "{exp_id}_{date_time}/{exp_name}/"
         dirname += "{}/".format(args.exp_name)
@@ -5895,7 +5890,7 @@ def is_emp_loss(args):
 
 
 def init_concepts(n_concepts, n_relations):
-    from reasoning.experiments.concepts import Concept, Graph, Placeholder, Tensor
+    from zeroc.concept_library.concepts import Concept, Graph, Placeholder, Tensor
     CONCEPTS = OrderedDict()
     OPERATORS = OrderedDict()
     IS_CUDA = False
@@ -5929,7 +5924,7 @@ def init_concepts(n_concepts, n_relations):
 
 
 def init_concepts_with_repr(concept_repr_dict=None, relation_repr_dict=None):
-    from reasoning.experiments.concepts import Concept, Graph, Placeholder, Tensor
+    from zeroc.concept_library.concepts import Concept, Graph, Placeholder, Tensor
     CONCEPTS = OrderedDict()
     OPERATORS = OrderedDict()
     IS_CUDA = False
@@ -6437,7 +6432,7 @@ def test_acc(
     
 #     set_seed(seed=1)
 #     # Make sure that the initialization of CONCEPTS and OPERATORS (including their embedding) is after setting the seed
-#     from reasoning.experiments.concepts_ARC2 import OPERATORS, CONCEPTS, load_task, seperate_concept
+#     from zeroc.concepts_shapes import OPERATORS, CONCEPTS, load_task, seperate_concept
 #     #filename = "c-RotateA+RotateB+RotateC(Lshape)_cz_8_model_CEBM_alpha_1_lambd_0.005_size_20.0_sams_60_et_mask_pl_False_neg_addrand+permlabel_nco_0.1_mask_mulcat_tbm_concat_p_0.2_id_1_Hash_7iTPXjV8_turing2.p"
 #     #filename = "c-Parallel+Vertical_cz_8_model_CEBM_alpha_1_las_0.1_size_20.0_sams_60_et_mask_pl_False_neg_addrand+permlabel_nco_0.2_mask_concat_tbm_concat_cm_c2_cf_1_p_0.2_id_1_Hash_1iHtZRVo_turing3.p"
 #     filename ='c-IsInside+IsTouch_cz_8_model_CEBM_alpha_1_las_0.1_size_20.0_sams_60_et_mask_pl_False_neg_addrand+permlabel_nco_0.2_mask_concat_tbm_concat_cm_c1_cf_0_p_0.2_id_1_Hash_Io3xVIYa_turing1.p'
@@ -6452,7 +6447,7 @@ def test_acc(
 
 #     set_seed(seed=1)
 #     # Make sure that the initialization of CONCEPTS and OPERATORS (including their embedding) is after setting the seed
-#     from reasoning.experiments.concepts_ARC2 import OPERATORS, CONCEPTS, load_task, seperate_concept
+#     zeroc.concepts_shapes import OPERATORS, CONCEPTS, load_task, seperate_concept
 #     val_acc_dict = test_acc(model, args, dataloader, device, CONCEPTS=CONCEPTS, OPERATORS=OPERATORS)
 #     print(val_acc_dict)
 
@@ -6464,7 +6459,7 @@ def test_acc(
 # if __name__ == "__main__":
 
 #     # Make sure that the initialization of CONCEPTS and OPERATORS (including their embedding) is after setting the seed
-#     from reasoning.experiments.concepts_ARC2 import OPERATORS, CONCEPTS, load_task, seperate_concept
+#     zeroc.concepts_shapes import OPERATORS, CONCEPTS, load_task, seperate_concept
 #     concept_embeddings = {key: to_np_array(CONCEPTS[key].get_node_repr()) for key in CONCEPTS}
 #     operator_embeddings = {key: to_np_array(OPERATORS[key].get_node_repr()) for key in OPERATORS}
 
