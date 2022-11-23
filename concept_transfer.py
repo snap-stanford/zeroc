@@ -15,8 +15,8 @@ from multiprocessing import Pool, Manager, get_context
 from contextlib import closing
 
 from vapory import *
-from reasoning.pytorch_net.util import init_args, to_np_array, plot_matrices, set_seed
-from reasoning.util import color_dict, visualize_matrices
+from zeroc.concept_library.util import init_args, to_np_array, plot_matrices, set_seed
+from zeroc.concept_library.util import color_dict, visualize_matrices
 
 
 # ## 0. Helper Functions
