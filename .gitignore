@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Added by author:
+datasets/data/*
+results/*.p
+
 # C extensions
 *.so
 
