@@ -2721,7 +2721,7 @@ def get_dataset(args, n_examples=None, isplot=False, is_load=False, is_rewrite=F
     if args.allow_connect is False:
         dataset_2d_param += "_connect_{}".format(args.allow_connect)
 
-    dataset_filename = REA_PATH + "/Datasets/{}-{}.p".format(args.dataset if not args.dataset.startswith("y-") else "c" + args.dataset[1:], dataset_2d_param)
+    dataset_filename = REA_PATH + "/data/{}-{}.p".format(args.dataset if not args.dataset.startswith("y-") else "c" + args.dataset[1:], dataset_2d_param)
     dataset = None
     if is_load and os.path.isfile(dataset_filename) and not is_rewrite:
         dataset, args_load = pload(dataset_filename)
@@ -2829,7 +2829,7 @@ def get_dataset(args, n_examples=None, isplot=False, is_load=False, is_rewrite=F
                             args.seed_3d, args.num_processes_3d, args.image_size_3d[0], args.image_size_3d[1],
                             args.color_map_3d[:4], args.add_thick_surf[0],  args.add_thick_surf[1],
                             args.add_thick_depth[0], args.add_thick_depth[1])
-        dataset_filename = REA_PATH + "/Datasets/{}-3d_{}_2d_{}.p".format(args.dataset, dataset_3d_param, dataset_2d_param)
+        dataset_filename = REA_PATH + "/data/{}-3d_{}_2d_{}.p".format(args.dataset, dataset_3d_param, dataset_2d_param)
         if os.path.isfile(dataset_filename) and not is_rewrite:
             dataset, args_load = pload(dataset_filename)
             if verbose:

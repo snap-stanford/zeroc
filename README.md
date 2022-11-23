@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ```
 
 # Dataset:
-The dataset files can be downloaded via [this link](https://drive.google.com/drive/folders/1g0wNYb4JuwA1lcDxgv4yUDOyToszNYmQ?usp=share_link). Download it to ./datasets/data/.
+The dataset files can be generated using the BabyARC engine under `datasets/` folder, or directly downloaded via [this link](https://drive.google.com/drive/folders/1g0wNYb4JuwA1lcDxgv4yUDOyToszNYmQ?usp=share_link), and put it under ./datasets/data/.
 
 
 # Training:
