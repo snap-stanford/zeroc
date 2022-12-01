@@ -1,6 +1,6 @@
 ## ZeroC: A Neuro-Symbolic Model for Zero-shot Concept Recognition and Acquisition at Inference Time
 
-[Paper](https://arxiv.org/abs/2206.15049) | [Slides](https://docs.google.com/presentation/d/1WAR4dZ0J2E-u3V_DgYBYTF4mDCmRk0FXI8GPlM2kqdQ/edit?usp=sharing) | [Project page](https://snap.stanford.edu/zeroc/)
+[Paper](https://arxiv.org/abs/2206.15049) | [Poster](https://github.com/snap-stanford/zeroc/blob/master/assets/zeroc_poster.pdf) | [Slides](https://docs.google.com/presentation/d/1WAR4dZ0J2E-u3V_DgYBYTF4mDCmRk0FXI8GPlM2kqdQ/edit?usp=sharing) | [Project page](https://snap.stanford.edu/zeroc/)
 
 This is the official repo for [ZeroC: A Neuro-Symbolic Model for Zero-shot Concept Recognition and Acquisition at Inference Time](https://arxiv.org/abs/2206.15049) (Wu et al. NeurIPS 2022). ZeroC is a neuro-symbolic architecture that after pretrained with simpler concepts and relations, can recognize and acquire novel, more complex concepts in a zero-shot way. 
 
