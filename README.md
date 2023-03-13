@@ -46,7 +46,9 @@ Here we detail the structure of this repo. The ".ipynb" files are equivalent to 
 
 # Training:
 
-Here we provide example commands for training energy-based models (EBMs) for concepts and relations. Full training command can be found under [results/README.md](https://github.com/snap-stanford/zeroc/blob/master/results/README.md). The results are saved under `./results/{--exp_id}_{--date_time}/`, as a pickle "*.p" file.
+Here we provide example commands for training energy-based models (EBMs) for concepts and relations. Full training command can be found under [results/README.md](https://github.com/snap-stanford/zeroc/blob/master/results/README.md). The results are saved under `./results/{--exp_id}_{--date_time}/`, as a pickle "*.p" file. 
+
+For each saved experiment "*.p" file under `./results/{--exp_id}_{--date_time}/`, it has a exp hash that uniquely encodes the arguments for this experiment. For example, if the result file is  `./results/{--exp_id}_{--date_time}/c-Line_cz_16_model_CEBM_alpha_1_las_0.1_..._cf_2_p_0.2_id_0_Hash_fRZtzn33_turing4.p`, then its hash is "fRZtzn33" at the end of the filename, which is a hash computed from all the argument for this experiment (therefore, different experiment will have different hash which does not overwrite each other under the same folder). 
 
 Training concepts for HD-Letter dataset (the `--dataset` argument specifies the dataset):
 ```code
@@ -78,8 +80,70 @@ Training 3D relations:
 python train.py --dataset=y-Parallel+VerticalMid+VerticalEdge --exp_id=zeroc --date_time=11-24 --inspect_interval=5 --save_interval=5 --color_avail=1,2 --n_examples=40000 --max_n_distractors=3 --canvas_size=16 --train_mode=cd --model_type=CEBM --mask_mode=concat --c_repr_mode=c2 --c_repr_first=2 --kl_coef=2 --entropy_coef_mask=0 --entropy_coef_repr=0 --ebm_target=mask --ebm_target_mode=r-rmbx --is_pos_repr_learnable=False --sample_step=60 --step_size=30 --step_size_repr=2 --lambd_start=0.1 --p_buffer=0.2 --channel_base=128 --two_branch_mode=concat --neg_mode=permlabel --aggr_mode=max --neg_mode_coef=0.2 --epochs=300 --early_stopping_patience=-1 --n_workers=0 --seed=3 --self_attn_mode=None --transforms=color+flip+rotate+resize:0.5 --pos_consistency_coef=1 --is_res=True --lr=1e-4 --id=0 --use_seed_2d=False --act_name=leakyrelu --rescaled_size=32,32 --color_map_3d=same --seed_3d=42 --batch_size=128 --gpuid=0
 ```
 
+
+
 # Inference
-The zero-shot concept recognition and aquisition experiments are provided in [inference_zero_shot.ipynb](https://github.com/snap-stanford/zeroc/blob/master/inference.ipynb).
+The zero-shot concept recognition and aquisition experiments are provided in [inference_zero_shot.ipynb](https://github.com/snap-stanford/zeroc/blob/master/inference_zero_shot.ipynb) and the corresponding [inference_zero_shot.py](https://github.com/snap-stanford/zeroc/blob/master/inference_zero_shot.py) file.
+
+The inference pipeline is as follows. First, depending on the type of inference, run one of the following evaluation command. The evaluation result will be saved under "./results/evaluation_{--evaluation_type}_{--date_time}/". Second, open the [inference_zero_shot.ipynb](https://github.com/snap-stanford/zeroc/blob/master/inference_zero_shot.ipynb) notebook, and run the cells in section 1 and the corresponding sub-section under Section 4 for accumulation of the evaluation results.
+
+Below are the evaluation commands. For all commands below,replace the hash for --concept_model_hash and --relation_model_hash to the hash of the corresponding experiment. See "Training" section for how to get the hash for one experiment. Also, by default the --concept_load_id and --relation_load_id use the "best" which automatically selects the best model checkpoint by the average validation accuracy of classification and grounding. Alternatively, these two arguments can be manually set by inspecting the difference between the energy of the positive examples and energy of negative example. Typically, choosing the point where the energy difference begins to diverge can result in the best performance.
+
+### HDLetter dataset:
+For classification with *HDLetter* dataset, run 
+```code
+export OMP_NUM_THREADS=3; python experiments/concept_generalization.py --evaluation_type=classify --dataset=c-Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=64 --is_new_vertical=True --val_batch_size=1 --val_n_examples=400 --is_bidirectional_re=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=12-12 --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
+```
+
+For detection (grounding) with *Eshape*, run:
+```code
+export OMP_NUM_THREADS=1; python experiments/concept_generalization.py --evaluation_type=grounding-Eshape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
+```
+
+For detection (grounding) with *Fshape*, run:
+```code
+export OMP_NUM_THREADS=1; python experiments/concept_generalization.py --evaluation_type=grounding-Fshape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
+```
+
+For detection (grounding) with *Ashape*, run:
+```code
+export OMP_NUM_THREADS=1; python experiments/concept_generalization.py --evaluation_type=grounding-Ashape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
+```
+
+### HDConcept dataset:
+
+For classification with *HDConcept* dataset, run:
+```code
+export OMP_NUM_THREADS=2; python experiments/concept_generalization.py --evaluation_type=classify --dataset=c-RectE1a+RectE2a+RectE3a --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=64 --is_new_vertical=True --val_batch_size=1 --val_n_examples=200 --is_bidirectional_re=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
+```
+
+For detection (grounding) with *Concept1*, run:
+```code
+export OMP_NUM_THREADS=1; python experiments/concept_generalization.py --evaluation_type=grounding-RectE1a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200  --allow_connect=False --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
+```
+
+For detection (grounding) with *Concept2*, run:
+```code
+export OMP_NUM_THREADS=2;  python experiments/concept_generalization.py --evaluation_type=grounding-RectE2a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200 --allow_connect=False --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
+```
+
+For detection (grounding) with *Concept3*, run:
+```code
+export OMP_NUM_THREADS=2;  python experiments/concept_generalization.py --evaluation_type=grounding-RectE3a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200 --allow_connect=True --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
+```
+
+### 2D to 3D concept transfer:
+
+First run the parse command to parse the new concepts into graphs for each example:
+```code
+python experiments/concept_generalization.py --evaluation_type=yc-parse+classify^parse --dataset=yc-Eshape[5,9]+Fshape[5,9]+Ashape[5,9] --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=64 --is_new_vertical=True --val_batch_size=1 --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --concept_model_hash_3D=jk4HQfir --relation_model_hash_3D=x72bDIyX --is_bidirectional_re=True --color_avail=1,2 --inspect_interval=1 --seed=2 --date_time=1-21 --topk=16 --gpuid=0
+```
+
+Then use the parsed graph, for classification in 3D image (replace the following --load_parse_src with the correct file under "./results/evaluation_yc-parse+classify^parse_{--date_time}/")
+
+```code
+python experiments/concept_generalization.py --evaluation_type=yc-parse+classify^classify --load_parse_src=evaluation_yc-parse+classify^parse_1-21/evaluation_yc-parse+classify^parse_canvas_16_color_1,2_ex_400_min_0_model_hc-ebm_mutu_500.0_ens_64_sas_150_newv_True_batch_1_con_fRZtzn33_re_Wfxw19nM_bi_True_seed_2_id_None_Hash_mU7ILNWm_turing3.p --dataset=yc-Eshape[5,9]+Fshape[5,9]+Ashape[5,9] --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=64 --is_new_vertical=True --val_batch_size=1 --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --concept_model_hash_3D=jk4HQfir --relation_model_hash_3D=x72bDIyX --is_bidirectional_re=True --color_avail=1,2 --inspect_interval=1 --seed=2 --date_time=1-21 --topk=16 --gpuid=0
+```
 
 # Citation
 If you find our work and/or our code useful, please cite us via:

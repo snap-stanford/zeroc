@@ -5,7 +5,8 @@ __pycache__/
 
 # Added by author:
 datasets/data/*
-results/*.p
+results/*
+*.pov
 
 # C extensions
 *.so

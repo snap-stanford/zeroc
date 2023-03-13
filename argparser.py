@@ -637,3 +637,31 @@ def update_default_hyperparam(Dict):
         if key not in Dict:
             Dict[key] = item
     return Dict
+
+
+def get_SGLD_kwargs(args):
+    kwargs = {}
+    if isinstance(args, dict):
+        args = init_args(args)
+    if args.exp_name == "None":
+        kwargs["lambd_start"] = args.lambd_start
+        kwargs["lambd"] = args.lambd
+        kwargs["SGLD_is_anneal"] = args.SGLD_is_anneal
+        kwargs["SGLD_is_penalize_lower"] = args.SGLD_is_penalize_lower if hasattr(args, "SGLD_is_penalize_lower") else True
+        kwargs["SGLD_mutual_exclusive_coef"] = args.SGLD_mutual_exclusive_coef
+        kwargs["SGLD_pixel_entropy_coef"] = args.SGLD_pixel_entropy_coef
+        kwargs["SGLD_pixel_gm_coef"] = args.SGLD_pixel_gm_coef
+        kwargs["SGLD_iou_batch_consistency_coef"] = args.SGLD_iou_batch_consistency_coef
+        kwargs["SGLD_iou_concept_repel_coef"] = args.SGLD_iou_concept_repel_coef
+        kwargs["SGLD_iou_relation_repel_coef"] = args.SGLD_iou_relation_repel_coef
+        kwargs["SGLD_iou_relation_overlap_coef"] = args.SGLD_iou_relation_overlap_coef
+        kwargs["SGLD_iou_attract_coef"] = args.SGLD_iou_attract_coef
+        kwargs["image_value_range"] = args.image_value_range
+        kwargs["w_init_type"] = args.w_init_type
+        kwargs["indiv_sample"] = args.indiv_sample
+        kwargs["step_size"] = args.step_size
+        kwargs["step_size_img"] = args.step_size_img
+        kwargs["step_size_z"] = args.step_size_z
+        kwargs["step_size_zgnn"] = args.step_size_zgnn
+        kwargs["step_size_wtarget"] = args.step_size_wtarget
+    return kwargs
