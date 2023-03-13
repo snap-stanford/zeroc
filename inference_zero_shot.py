@@ -2014,7 +2014,7 @@ parser.add_argument('--load_parse_src', type=str, default="gt", help='Choose fro
 parser.add_argument('--inspect_interval', type=int, default=20, help='inspect interval')
 parser.add_argument('--seed', type=int, default=2, help='color_avail.')
 parser.add_argument('--topk', type=int, default=16, help='color_avail.')
-parser.add_argument('--id', type=str, help='Id')
+parser.add_argument('--id', type=str, default="0", help='Id')
 parser.add_argument('--gpuid', type=str, help='Id')
 parser.add_argument('--date_time', type=str, help='Month and date')
 parser.add_argument('--data_range', type=str, default="None", help='"None" or "100:200"')
@@ -3143,6 +3143,7 @@ if args.evaluation_type.startswith("yc") and args.model_type == "rand-graph":
 
 isplot = False
 verbose = 1
+args.is_analysis = is_jupyter
 
 
 # ### 4.1.1 Parse:
@@ -3338,40 +3339,8 @@ if args.is_analysis and args.evaluation_type.startswith("grounding"):
 
 
 if args.is_analysis and args.evaluation_type.startswith("grounding"):
-    df_group = groupby_add_keys(
-            df,
-            by=["evaluation_type",
-                # 'SGLD_mutual_exclusive_coef',
-                # 'SGLD_pixel_entropy_coef',
-                # 'ensemble_size',
-                # 'sample_step',
-                # "SGLD_is_penalize_lower",
-                "concept_model_hash",
-                "relation_model_hash",
-                # "is_bidirectional_re",
-                # "max_n_distractors",
-                # "min_n_distractors",
-                "allow_connect",
-                "is_proper_size",
-                "is_concept",
-                "is_relation",
-                # "id",
-                "gpuid",
-               ],
-            add_keys=["hash", "machine"], other_keys=["iou", "epoch", "load_epoch"],
-            mode={
-                "max": ["iou", "epoch", "load_epoch"],
-                "count": None,
-            })
-    display(df_group.style.background_gradient(cmap=plt.cm.get_cmap("PiYG")))
-
-
-# In[ ]:
-
-
-if args.is_analysis and args.evaluation_type.startswith("grounding"):
-    dirname = EXP_PATH + "/evaluation_grounding-{}_1-18/".format("Eshape")
-    hash_str = "7saX0Qon"
+    dirname = EXP_PATH + "/evaluation_grounding-{}_1-21/".format("Eshape")
+    hash_str = "1AMKX9yn"
     filename = filter_filename(dirname, include=hash_str)[0]
     data_record = pload(dirname + "/" + filename)
     for i, iou in enumerate(data_record["iou"]):
@@ -3381,163 +3350,6 @@ if args.is_analysis and args.evaluation_type.startswith("grounding"):
 
 
 # ### 4.1.3 Classify:
-
-# In[ ]:
-
-
-# For clevr:
-args.evaluation_type = "classify"
-verbose = 0
-total_tasks = 200
-args.is_analysis = is_jupyter
-if args.is_analysis and args.evaluation_type.startswith("classify"):
-    dirname = EXP_PATH + "/evaluation_classify_04-08/"
-    filenames = filter_filename(dirname, include=".p", exclude="df_")
-    df_dict_list = []
-    for filename in filenames:
-        df_dict = {}
-        if verbose > 0:
-            p.print("{}:".format(filename), banner_size=100)
-        data_record = pload(dirname + filename)
-        if "acc^s:0.00" not in data_record["results"]:
-            if verbose > 0:
-                print("{} not fully processed.".format(filename))
-            continue
-        df_dict.update(update_default_hyperparam_generalization(data_record["args"]))
-        # df_dict["load_epoch"] = data_record["args"]["relation_load_id"] * 5
-        df_dict["filename"] = filename
-        df_dict["hash"] = filename.split("_")[-2]
-        df_dict["machine"] = filename.split("_")[-1][:-2]
-        if verbose > 0:
-            for key in ["SGLD_mutual_exclusive_coef", "SGLD_is_penalize_lower", "concept_model_hash", "relation_model_hash"]:
-                print("{}: {}".format(key, data_record["args"][key]))
-        acc_s_list = []
-        alpha_s_list = []
-        df_dict["n_examples"] = len(data_record["results"]["acc^s:0.00"][:total_tasks])
-        for alpha in np.linspace(0,1,11):
-            if verbose > 0:
-                print("acc^s:{:.2f}: {:.3f}".format(alpha, np.mean(data_record["results"]["acc^s:{:.2f}".format(alpha)][:total_tasks])))
-            acc_s_list.append(np.mean(data_record["results"]["acc^s:{:.2f}".format(alpha)][:total_tasks]))
-            alpha_s_list.append(alpha)
-        df_dict["acc_s_max"] = np.max(acc_s_list)
-        df_dict["acc_s_0"] = acc_s_list[0]
-        df_dict["acc_s_argmax"] = alpha_s_list[np.argmax(acc_s_list)]
-        if verbose > 0:
-            print()
-        acc_m_list = []
-        alpha_m_list = []
-        for alpha in np.linspace(0,1,11):
-            if verbose > 0:
-                print("acc^m:{:.2f}: {:.3f}".format(alpha, np.mean(data_record["results"]["acc^m:{:.2f}".format(alpha)][:total_tasks])))
-            acc_m_list.append(np.mean(data_record["results"]["acc^m:{:.2f}".format(alpha)][:total_tasks]))
-            alpha_m_list.append(alpha)
-        df_dict["acc_m_max"] = np.max(acc_m_list)
-        df_dict["acc_m_argmax"] = alpha_m_list[np.argmax(acc_m_list)]
-        df_dict_list.append(df_dict)
-    df = pd.DataFrame(df_dict_list)
-    ###
-    df = df[df["n_examples"]==25]
-    ###
-    df_group = groupby_add_keys(
-            df,
-            by=[
-                "dataset",
-                # "SGLD_mutual_exclusive_coef",
-                # "SGLD_is_penalize_lower",
-                "concept_model_hash",
-                "relation_model_hash",
-                "ensemble_size",
-                # "is_bidirectional_re",
-                # "max_n_distractors",
-                # "id",
-                "data_range",
-               ],
-            add_keys=["hash", "machine"],
-            other_keys=["acc_s_0", "acc_s_max", "acc_s_argmax", "acc_m_max", "acc_m_argmax", "n_examples"],
-            mode={
-                "mean": ["acc_s_argmax", "acc_m_argmax", "n_examples"],
-                "max": ["acc_s_0", "acc_s_max", "acc_m_max"],
-                "count": None,
-            }
-        )
-    pdump({"df": df, "df_group": df_group}, dirname + "df_{}-{}.p".format(datetime.now().month, datetime.now().day))
-    display(df_group.style.background_gradient(cmap=plt.cm.get_cmap("PiYG")))
-
-
-# In[ ]:
-
-
-args.evaluation_type = "classify"
-verbose = 0
-total_tasks = 200
-args.is_analysis = is_jupyter
-if args.is_analysis and args.evaluation_type.startswith("classify"):
-    dirname = EXP_PATH + "/evaluation_classify_12-12/"
-    filenames = filter_filename(dirname, include=".p", exclude="df_")
-    df_dict_list = []
-    for filename in filenames:
-        df_dict = {}
-        if verbose > 0:
-            p.print("{}:".format(filename), banner_size=100)
-        data_record = pload(dirname + filename)
-        if "acc^s:0.00" not in data_record["results"]:
-            if verbose > 0:
-                print("{} not fully processed.".format(filename))
-            continue
-        df_dict.update(update_default_hyperparam_generalization(data_record["args"]))
-        # df_dict["load_epoch"] = data_record["args"]["relation_load_id"] * 5
-        df_dict["filename"] = filename
-        df_dict["hash"] = filename.split("_")[-2]
-        df_dict["machine"] = filename.split("_")[-1][:-2]
-        if verbose > 0:
-            for key in ["SGLD_mutual_exclusive_coef", "SGLD_is_penalize_lower", "concept_model_hash", "relation_model_hash"]:
-                print("{}: {}".format(key, data_record["args"][key]))
-        acc_s_list = []
-        alpha_s_list = []
-        df_dict["n_examples"] = len(data_record["results"]["acc^s:0.00"][:total_tasks])
-        for alpha in np.linspace(0,1,11):
-            if verbose > 0:
-                print("acc^s:{:.2f}: {:.3f}".format(alpha, np.mean(data_record["results"]["acc^s:{:.2f}".format(alpha)][:total_tasks])))
-            acc_s_list.append(np.mean(data_record["results"]["acc^s:{:.2f}".format(alpha)][:total_tasks]))
-            alpha_s_list.append(alpha)
-        df_dict["acc_s_max"] = np.max(acc_s_list)
-        df_dict["acc_s_argmax"] = alpha_s_list[np.argmax(acc_s_list)]
-        if verbose > 0:
-            print()
-        acc_m_list = []
-        alpha_m_list = []
-        for alpha in np.linspace(0,1,11):
-            if verbose > 0:
-                print("acc^m:{:.2f}: {:.3f}".format(alpha, np.mean(data_record["results"]["acc^m:{:.2f}".format(alpha)][:total_tasks])))
-            acc_m_list.append(np.mean(data_record["results"]["acc^m:{:.2f}".format(alpha)][:total_tasks]))
-            alpha_m_list.append(alpha)
-        df_dict["acc_m_max"] = np.max(acc_m_list)
-        df_dict["acc_m_argmax"] = alpha_m_list[np.argmax(acc_m_list)]
-        df_dict_list.append(df_dict)
-    df = pd.DataFrame(df_dict_list)
-    df_group = groupby_add_keys(
-        df,
-        by=["dataset",
-            # "SGLD_mutual_exclusive_coef",
-            # "SGLD_is_penalize_lower",
-            "concept_model_hash",
-            "relation_model_hash",
-            # "ensemble_size",
-            # "is_bidirectional_re",
-            "max_n_distractors",
-            "id",
-           ],
-        add_keys=["hash", "machine"],
-        other_keys=["acc_s_max", "acc_s_argmax", "acc_m_max", "acc_m_argmax", "n_examples"],
-        mode={
-            "mean": ["acc_s_argmax", "acc_m_argmax", "n_examples"],
-            "max": ["acc_s_max", "acc_m_max"],
-            "count": None,
-        }
-    )
-    pdump({"df": df, "df_group": df_group}, dirname + "df_{}-{}.p".format(datetime.now().month, datetime.now().day))
-    display(df_group.style.background_gradient(cmap=plt.cm.get_cmap("PiYG")))
-
 
 # In[ ]:
 
@@ -3603,7 +3415,7 @@ if args.is_analysis and args.evaluation_type.startswith("classify"):
             # "ensemble_size",
             # "is_bidirectional_re",
             # "max_n_distractors",
-            "id",
+            # "id",
             "gpuid",
            ],
         add_keys=["hash", "machine"],
@@ -3618,119 +3430,9 @@ if args.is_analysis and args.evaluation_type.startswith("classify"):
     display(df_group.style.background_gradient(cmap=plt.cm.get_cmap("PiYG")))
 
 
-# In[ ]:
-
-
-if args.is_analysis and args.evaluation_type.startswith("classify"):
-    dirname = EXP_PATH + "/evaluation_classify_1-21/"
-    filenames = filter_filename(dirname, include=".p")
-    for filename in filenames:
-        print("{}:".format(filename))
-        data_record = pload(dirname + filename)
-        for key in ["SGLD_mutual_exclusive_coef", "SGLD_is_penalize_lower", "relation_model_hash"]:
-            print("{}: {}".format(key, data_record["args"][key]))
-        c_types = data_record["args"]["dataset"].split("-")[1].split("+")
-        alpha_list = np.linspace(0,2,201)
-        acc_list = []
-        for alpha in alpha_list:
-            energy_mean_list = []
-            mutual_exclusive_list = []
-            for c_type in c_types:
-                energy_mean_list.append(data_record["results"]['{}:energy_mean'.format(c_type)])
-                mutual_exclusive_list.append(data_record["results"]['{}:mutual_exclusive'.format(c_type)])
-            energy_mean_list = np.stack(energy_mean_list, -1)
-            mutual_exclusive_list = np.stack(mutual_exclusive_list, -1)
-            energy_total_list = energy_mean_list + mutual_exclusive_list * alpha
-            gt_list = np.array([c_types.index(item) for item in data_record["results"]["ground_truth"]])
-            pred_list = energy_total_list.argmin(-1)
-            if len(gt_list) == len(pred_list) * len(c_types):
-                gt_list = gt_list[::len(c_types)]
-            acc = (gt_list == pred_list).mean()
-            # print("acc: {:.4f}".format(acc))
-            acc_list.append(acc)
-        best_acc = np.max(acc_list)
-        best_alpha = alpha_list[np.argmax(acc_list)]
-        plt.figure(figsize=(7,5))
-        plt.plot(alpha_list, acc_list)
-        plt.xlabel("alpha")
-        plt.ylabel("acc")
-        plt.title(r"best acc: {:.4f}  at  $\alpha$={:.3f}".format(best_acc, best_alpha))
-        plt.axvline(best_alpha, linestyle="--", c="k", linewidth=1, alpha=0.5)
-        plt.show()
-
-
 # ### 4.2.1 Parse2D+classify3D:
 
 # #### 4.2.1.1 Parse:
-
-# In[ ]:
-
-
-# # Baseline for yc-fewshot: 
-# # data_record = pload("/dfs/user/tailin/.results/BabyARC_baselines/relation_models/mask_rcnn/eval/maskrcnn-conv_d_01-23_e_obj16full-cnn-v3-lr2.5e-5-fix_m_ip-172-31-77-28_Hash_DXvUBHG8.p_yc-Eshape[5,9]+Fshape[5,9]+Ashape[5,9]_v2")
-# data_record = pload("/dfs/user/tailin/.results/BabyARC_baselines/relation_models/mask_rcnn/eval/maskrcnn-conv_d_10-05_e_obj16full-cnn-v3-lr2.5e-5-fix-turing4_m_turing4_Hash_9IeiNpkP.p_yc-Eshape[5,9]+Fshape[5,9]+Ashape[5,9]_v2")
-# edit_distances_list = []
-# accs_list = []
-# for i, result in data_record.items():
-#     data = dataset[i]
-#     c_types = data[0][2]
-#     graphs_gt = [get_concept_graph(c_type, is_new_vertical=True) for c_type in c_types]
-#     edit_distances = [get_graph_edit_distance(result[k], graphs_gt[k], to_undirected=True) for k in range(len(c_types))]
-#     accs = [int(ele == 0) for ele in edit_distances]
-#     # print(f"{i}: acc: {accs}   edit: {edit_distances}")
-#     # for k in range(3):
-#     #     print(k)
-#     #     print(f"{c_types[k]}, gt:")
-#     #     pp.pprint(graphs_gt[k])
-#     #     print(f"pred, edit: {edit_distances[k]}")
-#     #     pp.pprint(result[k])
-#     # print()
-#     edit_distances_list.append(edit_distances)
-#     accs_list.append(accs)
-# print("acc_mean: {:.3f}".format(np.array(accs_list).mean()))
-# print("edit_distance_mean: {:.3f}".format(np.array(edit_distances_list).mean()))
-
-
-# In[ ]:
-
-
-# # Baseline for pc-fewshot: 
-# composite_args = init_args({
-#     "dataset": "pc-Cshape+Eshape+Fshape+Ashape+Hshape+Rect",
-#     "seed": 2,
-#     "n_examples": 400,
-#     "canvas_size": 16,
-#     "rainbow_prob": 0.,
-#     "w_type": "image+mask",
-#     "color_avail": "1,2",
-#     "min_n_distractors": 0,
-#     "max_n_distractors": 0,
-#     "allow_connect": True,
-#     "parsing_check": True if args.evaluation_type.startswith("grounding") else False,
-# })
-# dataset, _ = get_dataset(composite_args, is_load=True)
-# data_record = pload("/dfs/user/tailin/.results/BabyARC_baselines/relation_models/mask_rcnn/eval/maskrcnn-conv_d_10-05_e_obj16full-cnn-v3-lr2.5e-5-fix-turing4_m_turing4_Hash_9IeiNpkP.p_pc-Cshape+Eshape+Fshape+Ashape+Hshape+Rect_v2")
-# edit_distances_list = []
-# accs_list = []
-# for i, result in data_record.items():
-#     data = dataset[i]
-#     c_types = data[0][2]
-#     graphs_gt = [get_concept_graph(c_type, is_new_vertical=True) for c_type in c_types]
-#     edit_distances = [get_graph_edit_distance(result[k], graphs_gt[k], to_undirected=True) for k in range(len(c_types))]
-#     accs = [int(ele == 0) for ele in edit_distances]
-#     # print(f"{i}: acc: {accs}   edit: {edit_distances}")
-#     # for k in range(3):
-#     #     print(k)
-#     #     print(f"{c_types[k]}, gt:")
-#     #     pp.pprint(graphs_gt[k])
-#     #     print(f"pred, edit: {edit_distances[k]}")
-#     #     pp.pprint(result[k])
-#     # print()
-#     edit_distances_list.append(edit_distances)
-#     accs_list.append(accs)
-# print("acc_mean: {:.3f}".format(np.array(accs_list).mean()))
-# print("edit_distance_mean: {:.3f}".format(np.array(edit_distances_list).mean()))
-
 
 # In[ ]:
 
