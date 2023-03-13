@@ -691,6 +691,8 @@ def load_model_hash(
     subfolders = filter_filename(EXP_PATH, exclude=".")
     is_found = False
     for subfolder in subfolders:
+        if "evaluation" in subfolder:
+            continue
         filenames = filter_filename(f"{EXP_PATH}/{subfolder}/", include=[hash_str, ".p"])
         if len(filenames) == 1:
             is_found = True
@@ -3159,25 +3161,9 @@ show_only_error = True
 inspect_interval = 500
 is_baseline = False
 if args.is_analysis and args.evaluation_type.startswith("parse"):
-#     filename = 'evaluation_parse_canvas_8_color_1,2_mutu_10.0_seed_2_id_None_Hash_eClJj1+d_hyperion.p'
-#     filename = 'evaluation_parse_canvas_8_color_1,2_mutu_10.0_seed_3_id_None_Hash_AHKC6wbt_hyperion.p'
-#     filename = 'evaluation_parse_canvas_8_color_1,2_seed_3_id_None_Hash_qF6OwIys_hyperion.p'
-    # filename = 'evaluation_parse_canvas_16_color_1,2_mutu_50.0_ens_16_seed_2_id_None_Hash_3EUZZqDa_hyperion.p'
-    # filename = '/dfs/user/tailin/.results/evaluation_parse/evaluation_parse_canvas_16_color_1,2_model_rand-graph_mutu_0_ens_16_sas_150_seed_2_id_0_Hash_LIWCHHu2_hyperturing2.p'
-
-    # # Mask-RCNN, Old Vertical, 300 examples:
-    # graph_list = pload("/dfs/user/tailin/.results/BabyARC_baselines/relation_models/mask_rcnn/eval/maskrcnn-mlp_d_10-05_e_obj16-mlp-v1-fix_m_turing1_Hash_LklKRwaI.p")
-    # graph_list = pload("/dfs/user/tailin/.results/BabyARC_baselines/relation_models/mask_rcnn/eval/maskrcnn-mlp_d_10-05_e_obj16-mlp-v2-fix_m_turing1_Hash_DS42yuVg.p")
-    # is_baseline = True
-    
-    # # Mask-RCNN, New Vertical, 300 examples:
+    # # Mask-RCNN, New Vertical, 400 examples:
     # graph_list = pload("/dfs/user/tailin/.results/BabyARC_baselines/relation_models/mask_rcnn/eval/maskrcnn-conv_d_10-05_e_obj16full-cnn-v3-lr2.5e-5-fix-turing4_m_turing4_Hash_9IeiNpkP.p")
-    # graph_list = pload("/dfs/user/tailin/.results/BabyARC_baselines/relation_models/mask_rcnn/eval/maskrcnn-conv_d_10-05_e_obj16full-cnn-v3-lr2.5e-5-fix_m_turing3_Hash_ogsX1oYG.p")
-    # is_baseline = True
-    
-    # Mask-RCNN, New Vertical, 400 examples:
-    graph_list = pload("/dfs/user/tailin/.results/BabyARC_baselines/relation_models/mask_rcnn/eval/maskrcnn-conv_d_10-05_e_obj16full-cnn-v3-lr2.5e-5-fix-turing4_m_turing4_Hash_9IeiNpkP.p")
-    is_baseline = False
+    # is_baseline = False
 
     # # Rand-graph:
     # filename = "evaluation_parse_canvas_16_color_1,2_model_rand-graph_mutu_500_ens_64_sas_150_newv_True_seed_2_id_0_Hash_+hRuVNuO_turing4.p"
@@ -3185,8 +3171,7 @@ if args.is_analysis and args.evaluation_type.startswith("parse"):
     
     # Best for new_vertical, Dec 8:
     filename = "evaluation_parse_canvas_16_color_1,2_model_hc-ebm_mutu_500.0_ens_64_sas_150_newv_True_seed_2_id_None_Hash_kEIST2aZ_turing4.p"
-    # dirname = "/dfs/user/tailin/.results/evaluation_parse_12-08/"  # old 300 examples
-    dirname = "/dfs/user/tailin/.results/evaluation_parse_12-12/"  # new 400 examples
+    dirname = "results/evaluation_parse_1-21/"  # new 400 examples
 
     filenames = filter_filename(dirname, include=["canvas_16"], exclude=["Vht+VpvC"])
     # filenames = [filename]
