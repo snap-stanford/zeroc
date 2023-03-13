@@ -92,44 +92,44 @@ Below are the evaluation commands. For all commands below,replace the hash for -
 ### HDLetter dataset:
 For classification with *HDLetter* dataset, run 
 ```code
-export OMP_NUM_THREADS=3; python experiments/concept_generalization.py --evaluation_type=classify --dataset=c-Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=64 --is_new_vertical=True --val_batch_size=1 --val_n_examples=400 --is_bidirectional_re=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=12-12 --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
+python experiments/concept_generalization.py --evaluation_type=classify --dataset=c-Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=64 --is_new_vertical=True --val_batch_size=1 --val_n_examples=400 --is_bidirectional_re=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=12-12 --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
 ```
 
 For detection (grounding) with *Eshape*, run:
 ```code
-export OMP_NUM_THREADS=1; python experiments/concept_generalization.py --evaluation_type=grounding-Eshape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
+python experiments/concept_generalization.py --evaluation_type=grounding-Eshape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
 ```
 
 For detection (grounding) with *Fshape*, run:
 ```code
-export OMP_NUM_THREADS=1; python experiments/concept_generalization.py --evaluation_type=grounding-Fshape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
+python experiments/concept_generalization.py --evaluation_type=grounding-Fshape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
 ```
 
 For detection (grounding) with *Ashape*, run:
 ```code
-export OMP_NUM_THREADS=1; python experiments/concept_generalization.py --evaluation_type=grounding-Ashape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
+python experiments/concept_generalization.py --evaluation_type=grounding-Ashape --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=16 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=2 --allow_connect=False --is_bidirectional_re=True  --concept_model_hash=fRZtzn33 --relation_model_hash=Wfxw19nM --gpuid=0
 ```
 
 ### HDConcept dataset:
 
 For classification with *HDConcept* dataset, run:
 ```code
-export OMP_NUM_THREADS=2; python experiments/concept_generalization.py --evaluation_type=classify --dataset=c-RectE1a+RectE2a+RectE3a --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=64 --is_new_vertical=True --val_batch_size=1 --val_n_examples=200 --is_bidirectional_re=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
+python experiments/concept_generalization.py --evaluation_type=classify --dataset=c-RectE1a+RectE2a+RectE3a --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=obj:0.001 --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=64 --is_new_vertical=True --val_batch_size=1 --val_n_examples=200 --is_bidirectional_re=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
 ```
 
 For detection (grounding) with *Concept1*, run:
 ```code
-export OMP_NUM_THREADS=1; python experiments/concept_generalization.py --evaluation_type=grounding-RectE1a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200  --allow_connect=False --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
+python experiments/concept_generalization.py --evaluation_type=grounding-RectE1a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200  --allow_connect=False --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
 ```
 
 For detection (grounding) with *Concept2*, run:
 ```code
-export OMP_NUM_THREADS=2;  python experiments/concept_generalization.py --evaluation_type=grounding-RectE2a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200 --allow_connect=False --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
+python experiments/concept_generalization.py --evaluation_type=grounding-RectE2a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200 --allow_connect=False --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
 ```
 
 For detection (grounding) with *Concept3*, run:
 ```code
-export OMP_NUM_THREADS=2;  python experiments/concept_generalization.py --evaluation_type=grounding-RectE3a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200 --allow_connect=True --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
+python experiments/concept_generalization.py --evaluation_type=grounding-RectE3a --dataset=c-Lshape+Tshape+Cshape+Eshape+Fshape+Ashape --SGLD_mutual_exclusive_coef=500 --SGLD_is_penalize_lower=False --SGLD_pixel_entropy_coef=0 --canvas_size=20 --sample_step=150 --ensemble_size=256 --is_new_vertical=True --color_avail=1,2 --inspect_interval=20 --seed=2 --date_time=1-21 --min_n_distractors=1 --max_n_distractors=1 --val_n_examples=200 --allow_connect=True --is_bidirectional_re=True  --is_proper_size=True --concept_model_hash=AaalzcSD --relation_model_hash=NAzKCenZ --gpuid=0
 ```
 
 ### 2D to 3D concept transfer:
