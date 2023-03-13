@@ -2282,6 +2282,10 @@ if args.evaluation_type.startswith("yc-parse+classify"):
         "n_examples": 200,
         "num_processes_3d": 5,
         "n_queries_per_class": 1,
+        "color_map_3d": "same",
+        "add_thick_surf": (0, 0.5),
+        "add_thick_depth": (0, 0.5),
+        "image_size_3d": (256, 256),
         # 2D examples
         "seed": 102,
         "use_seed_2d": True,
