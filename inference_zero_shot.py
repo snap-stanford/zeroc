@@ -3621,33 +3621,6 @@ if args.is_analysis and args.evaluation_type.startswith("classify"):
 # In[ ]:
 
 
-df_group = groupby_add_keys(
-        df,
-        by=["dataset",
-            # "SGLD_mutual_exclusive_coef",
-            # "SGLD_is_penalize_lower",
-            "concept_model_hash",
-            "relation_model_hash",
-            # "ensemble_size",
-            # "is_bidirectional_re",
-            # "max_n_distractors",
-            "id",
-            "gpuid",
-           ],
-        add_keys=["hash", "machine"],
-        other_keys=[ "acc_s_0", "acc_s_0.1", "acc_s_argmax", "acc_m_max", "acc_m_argmax", "n_examples", "load_epoch"],
-        mode={
-            "mean": [ "acc_s_0", "acc_s_0.1", "acc_s_argmax", "acc_m_argmax", "n_examples", "load_epoch"],
-            "max": ["acc_s_max", "acc_m_max"],
-            "count": None,
-        }
-    )
-display(df_group.style.background_gradient(cmap=plt.cm.get_cmap("PiYG")))
-
-
-# In[ ]:
-
-
 if args.is_analysis and args.evaluation_type.startswith("classify"):
     dirname = EXP_PATH + "/evaluation_classify_1-21/"
     filenames = filter_filename(dirname, include=".p")
